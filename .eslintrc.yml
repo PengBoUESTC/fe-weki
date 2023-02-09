@@ -21,3 +21,5 @@ rules:
   semi:
     - error
     - never
+ignorePatterns:
+  - 'dist/**/*'

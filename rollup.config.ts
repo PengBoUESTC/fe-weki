@@ -6,7 +6,7 @@ import clear from 'rollup-plugin-clear'
 import json from '@rollup/plugin-json'
 
 export default defineConfig({
-  input: 'lib/index.ts',
+  input: 'lib/cli.ts',
   output: {
     dir: 'dist',
     format: 'cjs',

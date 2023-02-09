@@ -2,8 +2,10 @@
   "name": "package-template",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
-  "bin":{},
+  "main": "dist/cli.js",
+  "bin": {
+    "fe-weki": "./bin/index.js"
+  },
   "directories": {
     "lib": "lib"
   },
@@ -18,6 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cac": "^6.7.14",
     "release-pkg": "^1.1.2"
   },
   "devDependencies": {
