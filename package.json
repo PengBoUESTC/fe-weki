@@ -19,6 +19,10 @@
   "keywords": [
     "taro",
     "vue",
+    "nuxtjs",
+    "nextjs",
+    "react",
+    "framework",
     "web"
   ],
   "author": "",
@@ -50,6 +54,11 @@
     "ts-jest": "^29.0.3",
     "typescript": "^4.9.3"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PengBoUESTC/fe-weki"
+  },
+  "homepage": "https://github.com/PengBoUESTC/fe-weki",
   "lint-staged": {
     "lib/**/*.{js,ts}": [
       "eslint --fix",
