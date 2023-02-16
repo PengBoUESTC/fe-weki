@@ -1,7 +1,7 @@
 {
   "name": "fe-weki",
   "version": "1.0.0",
-  "description": "",
+  "description": "Create your web app with fe-weki",
   "main": "dist/cli.js",
   "bin": {
     "fe-weki": "./bin/index.js"
@@ -16,7 +16,11 @@
     "postinstall": "npx simple-git-hooks",
     "test": "jest"
   },
-  "keywords": [],
+  "keywords": [
+    "taro",
+    "vue",
+    "web"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
