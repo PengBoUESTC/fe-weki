@@ -1,5 +1,5 @@
 {
-  "name": "package-template",
+  "name": "fe-weki",
   "version": "1.0.0",
   "description": "",
   "main": "dist/cli.js",
@@ -21,6 +21,8 @@
   "license": "ISC",
   "dependencies": {
     "cac": "^6.7.14",
+    "execa": "^7.0.0",
+    "prompts": "^2.4.2",
     "release-pkg": "^1.1.2"
   },
   "devDependencies": {
@@ -30,6 +32,7 @@
     "@rollup/plugin-typescript": "^9.0.2",
     "@types/jest": "^29.2.3",
     "@types/node": "^18.11.9",
+    "@types/prompts": "^2.4.2",
     "@typescript-eslint/eslint-plugin": "^5.44.0",
     "@typescript-eslint/parser": "^5.44.0",
     "conventional-changelog-cli": "^2.2.2",
