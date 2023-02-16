@@ -1,0 +1,1 @@
+add a `add` command: users can add there own framework 
