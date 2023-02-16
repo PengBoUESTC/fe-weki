@@ -9852,14 +9852,12 @@ const FRAMEWORK = [
 ]
 cli
   .command('[appName]', 'init')
-  .option('--registry [registry]', '[string] npm registry')
   .alias('init')
   .action((appName, options) =>
     __awaiter(void 0, void 0, void 0, function* () {
-      const { registry = 'https://registry.npmjs.org' } = options
       const answers = yield prompts(FRAMEWORK)
       const { init } = answers
-      execaCommandSync(`${init} ${appName || ''} --registry=${registry}`, {
+      execaCommandSync(`${init} ${appName || ''}`, {
         stdio: 'inherit',
       })
     }),
