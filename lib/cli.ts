@@ -8,7 +8,27 @@ const cli = cac('fe-weki')
 const frameWorkChoices = [
   {
     title: 'vue',
-    value: ' npm init vue@latest',
+    value: 'npm init vue@latest',
+  },
+  {
+    title: 'react',
+    value: 'npx create-react-app',
+  },
+  {
+    title: 'react',
+    value: 'npx create-react-app',
+  },
+  {
+    title: 'svelte',
+    value: 'npx degit sveltejs/template',
+  },
+  {
+    title: 'nextjs',
+    value: 'npx create-next-app@latest',
+  },
+  {
+    title: 'nuxtjs',
+    value: 'npx create-nuxt-app',
   },
   {
     title: 'taro',
@@ -20,22 +40,20 @@ const FRAMEWORK: PromptObject[] = [
   {
     type: 'select',
     name: 'init',
-    message: '请选择需要使用的框架！',
+    message: 'select your framework',
     choices: frameWorkChoices,
   },
 ]
 
-// 收集 前端框架 自动化创建项目
-
-cli.option('[appName]', 'the target app name')
-
 cli
   .command('[appName]', 'init')
+  .option('--registry [registry]', '[string] npm registry')
   .alias('init')
-  .action(async (appName: string) => {
+  .action(async (appName: string, options) => {
+    const { registry = 'https://registry.npmjs.org' } = options
     const answers = await prompts(FRAMEWORK)
     const { init } = answers
-    execaCommandSync(`${init} ${appName || ''}`, {
+    execaCommandSync(`${init} ${appName || ''} --registry=${registry}`, {
       stdio: 'inherit',
     })
   })
