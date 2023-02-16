@@ -47,13 +47,11 @@ const FRAMEWORK: PromptObject[] = [
 
 cli
   .command('[appName]', 'init')
-  .option('--registry [registry]', '[string] npm registry')
   .alias('init')
   .action(async (appName: string, options) => {
-    const { registry = 'https://registry.npmjs.org' } = options
     const answers = await prompts(FRAMEWORK)
     const { init } = answers
-    execaCommandSync(`${init} ${appName || ''} --registry=${registry}`, {
+    execaCommandSync(`${init} ${appName || ''}`, {
       stdio: 'inherit',
     })
   })
