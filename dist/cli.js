@@ -9822,10 +9822,6 @@ const frameWorkChoices = [
     value: 'npx create-react-app',
   },
   {
-    title: 'react',
-    value: 'npx create-react-app',
-  },
-  {
     title: 'svelte',
     value: 'npx degit sveltejs/template',
   },
