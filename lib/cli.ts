@@ -57,12 +57,22 @@ cli
   .action(async (framework: string, options) => {
     const { init } = options
     if (!framework) {
-      console.log(`\n${colors.red('[framework] is necessary!')}`)
+      console.log(`\n❌ ${colors.red('[framework] is necessary!')}`)
+      return
     }
+    if (!init) {
+      console.log(`\n❌ ${colors.red('[init] is necessary!')}`)
+      return
+    }
+
     const initCmdMap = await getCfg()
 
     const curPkg = initCmdMap[framework]
     if (curPkg) {
+      if (curPkg.trim() === init.trim()) {
+        console.log(`\n✅ ${colors.green('Done')}`)
+        return
+      }
       // 确认逻辑
       const { yes } = await prompts([
         {
@@ -78,6 +88,7 @@ cli
       if (!yes) return
     }
     setCfg(initCmdMap, { [framework]: init })
+    console.log(`\n${colors.green('Done')}✅`)
   })
 
 cli.help()

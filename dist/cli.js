@@ -9915,7 +9915,6 @@ cli
       ]
       const answers = yield prompts(FRAMEWORK)
       const { init } = answers
-      console.log(init)
       execaCommandSync(`${init} ${appName || ''}`, {
         stdio: 'inherit',
       })
@@ -9928,17 +9927,26 @@ cli
     __awaiter(void 0, void 0, void 0, function* () {
       const { init } = options
       if (!framework) {
-        console.log(`\n${picocolorsExports.red('[framework] is necessary!')}`)
+        console.log(`\n❌${picocolorsExports.red('[framework] is necessary!')}`)
+        return
+      }
+      if (!init) {
+        console.log(`\n❌${picocolorsExports.red('[init] is necessary!')}`)
+        return
       }
       const initCmdMap = yield getCfg()
       const curPkg = initCmdMap[framework]
       if (curPkg) {
+        if (curPkg.trim() === init.trim()) {
+          console.log(`\n${picocolorsExports.green('Done')}✅`)
+          return
+        }
         const { yes } = yield prompts([
           {
             type: 'confirm',
             name: 'yes',
             message: `replace ${picocolorsExports.green(
-              curPkg,
+              framework,
             )}'s init command from ${picocolorsExports.yellow(
               curPkg,
             )} to ${picocolorsExports.green(init)}`,
@@ -9947,6 +9955,7 @@ cli
         if (!yes) return
       }
       setCfg(initCmdMap, { [framework]: init })
+      console.log(`\n${picocolorsExports.green('Done')}✅`)
     }),
   )
 cli.help()
