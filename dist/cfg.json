@@ -1,0 +1,8 @@
+{
+  "vue": "tt",
+  "react": "npx create-react-app",
+  "svelte": "npx degit sveltejs/template",
+  "nextjs": "npx create-next-app@latest",
+  "nuxtjs": "npx create-nuxt-app",
+  "taro": "npx @tarojs/cli init"
+}

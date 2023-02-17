@@ -4,6 +4,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import clear from 'rollup-plugin-clear'
 import json from '@rollup/plugin-json'
+import copy from 'rollup-plugin-copy'
 
 export default defineConfig({
   input: 'lib/cli.ts',
@@ -18,6 +19,11 @@ export default defineConfig({
     nodeResolve(),
     commonjs(),
     clear({ targets: ['dist'] }),
+    copy({
+      targets: [
+        { src: 'lib/cfg.json', dest: 'dist' }
+      ]
+    }),
     typescript({
       tsconfig: 'tsconfig.json',
     }),
