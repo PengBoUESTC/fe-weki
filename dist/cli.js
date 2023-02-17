@@ -2,19 +2,21 @@
 
 var require$$2 = require('events')
 var require$$0 = require('readline')
+var require$$0$1 = require('tty')
 var node_buffer = require('node:buffer')
 var path$3 = require('node:path')
 var childProcess = require('node:child_process')
 var process$2 = require('node:process')
-var require$$0$3 = require('child_process')
-var require$$0$2 = require('path')
-var require$$0$1 = require('fs')
+var require$$0$4 = require('child_process')
+var require$$0$3 = require('path')
+var require$$0$2 = require('fs')
 var url = require('node:url')
 var os = require('node:os')
-var require$$0$4 = require('assert')
-var require$$0$6 = require('buffer')
-var require$$0$5 = require('stream')
+var require$$0$5 = require('assert')
+var require$$0$7 = require('buffer')
+var require$$0$6 = require('stream')
 var require$$2$1 = require('util')
+var node_fs = require('node:fs')
 
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -7916,6 +7918,77 @@ function isNodeLT(tar) {
 
 var prompts = isNodeLT('8.6.0') ? requireDist() : requireLib()
 
+var picocolorsExports = {}
+var picocolors = {
+  get exports() {
+    return picocolorsExports
+  },
+  set exports(v) {
+    picocolorsExports = v
+  },
+}
+
+let tty = require$$0$1
+
+let isColorSupported =
+  !('NO_COLOR' in process.env || process.argv.includes('--no-color')) &&
+  ('FORCE_COLOR' in process.env ||
+    process.argv.includes('--color') ||
+    process.platform === 'win32' ||
+    (tty.isatty(1) && process.env.TERM !== 'dumb') ||
+    'CI' in process.env)
+
+let formatter =
+  (open, close, replace = open) =>
+  (input) => {
+    let string = '' + input
+    let index = string.indexOf(close, open.length)
+    return ~index
+      ? open + replaceClose(string, close, replace, index) + close
+      : open + string + close
+  }
+
+let replaceClose = (string, close, replace, index) => {
+  let start = string.substring(0, index) + replace
+  let end = string.substring(index + close.length)
+  let nextIndex = end.indexOf(close)
+  return ~nextIndex
+    ? start + replaceClose(end, close, replace, nextIndex)
+    : start + end
+}
+
+let createColors = (enabled = isColorSupported) => ({
+  isColorSupported: enabled,
+  reset: enabled ? (s) => `\x1b[0m${s}\x1b[0m` : String,
+  bold: enabled ? formatter('\x1b[1m', '\x1b[22m', '\x1b[22m\x1b[1m') : String,
+  dim: enabled ? formatter('\x1b[2m', '\x1b[22m', '\x1b[22m\x1b[2m') : String,
+  italic: enabled ? formatter('\x1b[3m', '\x1b[23m') : String,
+  underline: enabled ? formatter('\x1b[4m', '\x1b[24m') : String,
+  inverse: enabled ? formatter('\x1b[7m', '\x1b[27m') : String,
+  hidden: enabled ? formatter('\x1b[8m', '\x1b[28m') : String,
+  strikethrough: enabled ? formatter('\x1b[9m', '\x1b[29m') : String,
+  black: enabled ? formatter('\x1b[30m', '\x1b[39m') : String,
+  red: enabled ? formatter('\x1b[31m', '\x1b[39m') : String,
+  green: enabled ? formatter('\x1b[32m', '\x1b[39m') : String,
+  yellow: enabled ? formatter('\x1b[33m', '\x1b[39m') : String,
+  blue: enabled ? formatter('\x1b[34m', '\x1b[39m') : String,
+  magenta: enabled ? formatter('\x1b[35m', '\x1b[39m') : String,
+  cyan: enabled ? formatter('\x1b[36m', '\x1b[39m') : String,
+  white: enabled ? formatter('\x1b[37m', '\x1b[39m') : String,
+  gray: enabled ? formatter('\x1b[90m', '\x1b[39m') : String,
+  bgBlack: enabled ? formatter('\x1b[40m', '\x1b[49m') : String,
+  bgRed: enabled ? formatter('\x1b[41m', '\x1b[49m') : String,
+  bgGreen: enabled ? formatter('\x1b[42m', '\x1b[49m') : String,
+  bgYellow: enabled ? formatter('\x1b[43m', '\x1b[49m') : String,
+  bgBlue: enabled ? formatter('\x1b[44m', '\x1b[49m') : String,
+  bgMagenta: enabled ? formatter('\x1b[45m', '\x1b[49m') : String,
+  bgCyan: enabled ? formatter('\x1b[46m', '\x1b[49m') : String,
+  bgWhite: enabled ? formatter('\x1b[47m', '\x1b[49m') : String,
+})
+
+picocolors.exports = createColors()
+picocolorsExports.createColors = createColors
+
 var crossSpawnExports = {}
 var crossSpawn = {
   get exports() {
@@ -7935,7 +8008,7 @@ function requireWindows() {
   windows = isexe
   isexe.sync = sync
 
-  var fs = require$$0$1
+  var fs = require$$0$2
 
   function checkPathExt(path, options) {
     var pathext =
@@ -7986,7 +8059,7 @@ function requireMode() {
   mode = isexe
   isexe.sync = sync
 
-  var fs = require$$0$1
+  var fs = require$$0$2
 
   function isexe(path, options, cb) {
     fs.stat(path, function (er, stat) {
@@ -8094,7 +8167,7 @@ const isWindows =
   process.env.OSTYPE === 'cygwin' ||
   process.env.OSTYPE === 'msys'
 
-const path$2 = require$$0$2
+const path$2 = require$$0$3
 const COLON = isWindows ? ';' : ':'
 const isexe = isexe_1
 
@@ -8241,7 +8314,7 @@ pathKey$2.exports = pathKey$1
 // TODO: Remove this for the next major release
 pathKeyExports.default = pathKey$1
 
-const path$1 = require$$0$2
+const path$1 = require$$0$3
 const which = which_1
 const getPathKey = pathKeyExports
 
@@ -8360,7 +8433,7 @@ var shebangCommand$1 = (string = '') => {
   return argument ? `${binary} ${argument}` : binary
 }
 
-const fs = require$$0$1
+const fs = require$$0$2
 const shebangCommand = shebangCommand$1
 
 function readShebang$1(command) {
@@ -8384,7 +8457,7 @@ function readShebang$1(command) {
 
 var readShebang_1 = readShebang$1
 
-const path = require$$0$2
+const path = require$$0$3
 const resolveCommand = resolveCommand_1
 const escape = _escape
 const readShebang = readShebang_1
@@ -8534,7 +8607,7 @@ var enoent$1 = {
   notFoundError,
 }
 
-const cp = require$$0$3
+const cp = require$$0$4
 const parse = parse_1
 const enoent = enoent$1
 
@@ -9299,7 +9372,7 @@ if (!processOk(process$1)) {
     return function () {}
   }
 } else {
-  var assert = require$$0$4
+  var assert = require$$0$5
   var signals = requireSignals()
   var isWin = /^win/i.test(process$1.platform)
 
@@ -9501,7 +9574,7 @@ var getStream$1 = {
   },
 }
 
-const { PassThrough: PassThroughStream } = require$$0$5
+const { PassThrough: PassThroughStream } = require$$0$6
 
 var bufferStream$1 = (options) => {
   options = { ...options }
@@ -9553,8 +9626,8 @@ var bufferStream$1 = (options) => {
   return stream
 }
 
-const { constants: BufferConstants } = require$$0$6
-const stream = require$$0$5
+const { constants: BufferConstants } = require$$0$7
+const stream = require$$0$6
 const { promisify } = require$$2$1
 const bufferStream = bufferStream$1
 
@@ -9811,55 +9884,69 @@ function execaCommandSync(command, options) {
   return execaSync(file, args, options)
 }
 
+const cfgPath = path$3.join(__dirname, './cfg.json')
+const getCfg = () =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    const initCmdMap = JSON.parse(node_fs.readFileSync(cfgPath).toString())
+    return initCmdMap
+  })
+const setCfg = (initCmdMap, newItem) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    const newMap = Object.assign(Object.assign({}, initCmdMap), newItem)
+    node_fs.writeFileSync(cfgPath, JSON.stringify(newMap, null, 2), {})
+  })
 const cli = cac('fe-weki')
-const frameWorkChoices = [
-  {
-    title: 'vue',
-    value: 'npm init vue@latest',
-  },
-  {
-    title: 'react',
-    value: 'npx create-react-app',
-  },
-  {
-    title: 'react',
-    value: 'npx create-react-app',
-  },
-  {
-    title: 'svelte',
-    value: 'npx degit sveltejs/template',
-  },
-  {
-    title: 'nextjs',
-    value: 'npx create-next-app@latest',
-  },
-  {
-    title: 'nuxtjs',
-    value: 'npx create-nuxt-app',
-  },
-  {
-    title: 'taro',
-    value: 'npx @tarojs/cli init',
-  },
-]
-const FRAMEWORK = [
-  {
-    type: 'select',
-    name: 'init',
-    message: 'select your framework',
-    choices: frameWorkChoices,
-  },
-]
 cli
   .command('[appName]', 'init')
   .alias('init')
   .action((appName, options) =>
     __awaiter(void 0, void 0, void 0, function* () {
+      const initCmdMap = yield getCfg()
+      const choices = Object.entries(initCmdMap).map(([title, value]) => {
+        return { title, value }
+      })
+      const FRAMEWORK = [
+        {
+          type: 'select',
+          name: 'init',
+          message: 'select your framework',
+          choices,
+        },
+      ]
       const answers = yield prompts(FRAMEWORK)
       const { init } = answers
+      console.log(init)
       execaCommandSync(`${init} ${appName || ''}`, {
         stdio: 'inherit',
       })
+    }),
+  )
+cli
+  .command('add [framework]', 'add a new framework')
+  .option('--init [init]', 'the init cmd')
+  .action((framework, options) =>
+    __awaiter(void 0, void 0, void 0, function* () {
+      const { init } = options
+      if (!framework) {
+        console.log(`\n${picocolorsExports.red('[framework] is necessary!')}`)
+      }
+      const initCmdMap = yield getCfg()
+      const curPkg = initCmdMap[framework]
+      if (curPkg) {
+        const { yes } = yield prompts([
+          {
+            type: 'confirm',
+            name: 'yes',
+            message: `replace ${picocolorsExports.green(
+              curPkg,
+            )}'s init command from ${picocolorsExports.yellow(
+              curPkg,
+            )} to ${picocolorsExports.green(init)}`,
+          },
+        ])
+        if (!yes) return
+      }
+      setCfg(initCmdMap, { [framework]: init })
     }),
   )
 cli.help()
