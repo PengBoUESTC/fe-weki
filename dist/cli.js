@@ -9927,18 +9927,20 @@ cli
     __awaiter(void 0, void 0, void 0, function* () {
       const { init } = options
       if (!framework) {
-        console.log(`\n❌${picocolorsExports.red('[framework] is necessary!')}`)
+        console.log(
+          `\n❌ ${picocolorsExports.red('[framework] is necessary!')}`,
+        )
         return
       }
       if (!init) {
-        console.log(`\n❌${picocolorsExports.red('[init] is necessary!')}`)
+        console.log(`\n❌ ${picocolorsExports.red('[init] is necessary!')}`)
         return
       }
       const initCmdMap = yield getCfg()
       const curPkg = initCmdMap[framework]
       if (curPkg) {
         if (curPkg.trim() === init.trim()) {
-          console.log(`\n${picocolorsExports.green('Done')}✅`)
+          console.log(`\n✅ ${picocolorsExports.green('Done')}`)
           return
         }
         const { yes } = yield prompts([

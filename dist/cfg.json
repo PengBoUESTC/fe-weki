@@ -1,5 +1,5 @@
 {
-  "vue": "tt",
+  "vue": "npm init vue@latest",
   "react": "npx create-react-app",
   "svelte": "npx degit sveltejs/template",
   "nextjs": "npx create-next-app@latest",
